@@ -1,3 +1,3 @@
 [workspace]
 
-members = ["projects/libs-wasm", "src/balls/crate"]
+members = ["libs/libs-wasm", "sketches/balls/crate"]

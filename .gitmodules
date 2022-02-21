@@ -1,6 +1,6 @@
-[submodule "projects/libs-wasm"]
-	path = projects/libs-wasm
+[submodule "libs/libs-wasm"]
+	path = libs/libs-wasm
 	url = git@github.com:trivial-space/libs-wasm.git
-[submodule "projects/painter"]
-	path = projects/painter
+[submodule "libs/painter"]
+	path = libs/painter
 	url = git@github.com:trivial-space/painter.git
