@@ -205,7 +205,11 @@ dependencies = [
 name = "tvs-sketch-balls"
 version = "0.1.0"
 dependencies = [
+ "approx",
+ "bytemuck",
  "console_error_panic_hook",
+ "glam",
+ "rand",
  "wasm-bindgen",
  "wasm-bindgen-test",
 ]
