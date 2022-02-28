@@ -1,5 +1,5 @@
 import './style.css'
-import init2, { greet, todo } from '../crate/pkg/tvs_sketch_balls'
+import init2, { greet, create_ball1 } from '../crate/pkg/tvs_sketch_balls'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 
@@ -10,5 +10,6 @@ app.innerHTML = `
 
 init2().then(() => {
 	greet()
-	todo()
+	const ball = create_ball1()
+	console.log(ball)
 })

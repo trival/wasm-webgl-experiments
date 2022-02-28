@@ -61,7 +61,7 @@ module.exports = {
 		'no-plusplus': 'off',
 		'no-restricted-syntax': 'off',
 		'no-unused-vars': 'off',
-		'no-console': 'warn',
+		'no-console': 'off',
 		'no-underscore-dangle': 'off',
 		'no-case-declarations': 'off',
 		'no-param-reassign': 'off',
