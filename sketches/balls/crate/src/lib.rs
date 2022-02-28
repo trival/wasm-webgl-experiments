@@ -74,7 +74,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     let mut y = 5;
     while y >= -5 {
         col1.push(vec3(1.0, y as f32, 0.0));
-        y += 1;
+        y -= 1;
     }
     grid.add_col(col1.clone());
 
@@ -102,9 +102,9 @@ pub fn create_ball1_geom() -> BufferedGeometry {
         }
     }
 
-    geom.triangulate();
     geom.generate_face_normals();
     geom.generate_vertex_normals();
+    geom.triangulate();
 
     geom.to_buffered_geometry_by_type(
         MeshBufferedGeometryType::FaceNormals,
