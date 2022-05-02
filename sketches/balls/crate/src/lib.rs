@@ -117,6 +117,10 @@ pub fn create_ball1() -> JsValue {
     serde_wasm_bindgen::to_value(&create_ball1_geom()).unwrap()
 }
 
+pub fn create_camera() -> JsValue {
+    todo!()
+}
+
 #[test]
 fn test_ball1() {
     let res = create_ball1_geom();
