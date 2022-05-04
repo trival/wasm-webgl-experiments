@@ -1,15 +1,17 @@
 import './style.css'
-import init2, { greet, create_ball1 } from '../crate/pkg/tvs_sketch_balls'
-
-const app = document.querySelector<HTMLDivElement>('#app')!
-
-app.innerHTML = `
-  <h1>Hello Vite!</h1>
-  <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
-`
+import init2, {
+	greet,
+	create_ball1,
+	create_camera,
+} from '../crate/pkg/tvs_sketch_balls'
+import { render, wasmGeometryToFormData } from './render'
 
 init2().then(() => {
 	greet()
-	const ball = create_ball1()
+	const ball = wasmGeometryToFormData(create_ball1())
 	console.log(ball)
+	const camera = create_camera()
+	console.log(camera)
+
+	render(ball, camera)
 })
