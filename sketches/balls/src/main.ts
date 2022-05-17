@@ -1,17 +1,32 @@
 import './style.css'
 import init2, {
-	greet,
-	create_ball1,
-	create_camera,
+	get_geom,
+	get_mvp,
+	setup,
+	update,
 } from '../crate/pkg/tvs_sketch_balls'
-import { render, wasmGeometryToFormData } from './render'
+import { render, renderInit, wasmGeometryToFormData } from './render'
 
 init2().then(() => {
-	greet()
-	const ball = wasmGeometryToFormData(create_ball1())
+	setup()
+	const ball = wasmGeometryToFormData(get_geom())
 	console.log(ball)
-	const camera = create_camera()
-	console.log(camera)
+	renderInit(ball)
 
-	render(ball, camera)
+	let lastTime = 0
+
+	const tick = (newTime: number) => {
+		if (!(lastTime && newTime)) {
+			update(0)
+		} else {
+			update(newTime - lastTime)
+		}
+
+		render(get_mvp())
+
+		lastTime = newTime
+		requestAnimationFrame(tick)
+	}
+
+	tick(0)
 })

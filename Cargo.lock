@@ -263,6 +263,7 @@ dependencies = [
  "getrandom",
  "glam",
  "js-sys",
+ "lazy_static",
  "rand",
  "serde",
  "serde-wasm-bindgen",

@@ -37,11 +37,10 @@ export function wasmGeometryToFormData(geom: WasmGeometry): FormData {
 	}
 }
 
-export function render(geometry: FormData, camera: Float32Array) {
-	const canvas = document.getElementById('canvas') as HTMLCanvasElement
-	const painter = new Painter(canvas)
-	const form = painter.createForm().update(geometry)
-	const vert = /*glsl*/ `
+const canvas = document.getElementById('canvas') as HTMLCanvasElement
+const painter = new Painter(canvas)
+const form = painter.createForm()
+const vert = /*glsl*/ `
 	attribute vec3 position;
 	attribute vec3 normal;
 	attribute vec3 color;
@@ -55,18 +54,26 @@ export function render(geometry: FormData, camera: Float32Array) {
 		vColor = color;
 	}
 	`
-	const frag = /*glsl*/ `
+const frag = /*glsl*/ `
 	precision highp float;
 	varying vec3 vColor;
 	void main() {
 		gl_FragColor = vec4(vColor, 1.0);
 	}
 	`
-	const shade = painter.createShade().update({ vert, frag })
-	const sketch = painter.createSketch().update({
-		form,
-		shade,
+const shade = painter.createShade().update({ vert, frag })
+const sketch = painter.createSketch().update({
+	form,
+	shade,
+})
+
+export function renderInit(geometry: FormData) {
+	form.update(geometry)
+}
+
+export function render(camera: Float32Array) {
+	painter.draw({
+		sketches: sketch,
 		uniforms: { camera },
 	})
-	painter.draw({ sketches: sketch })
 }
