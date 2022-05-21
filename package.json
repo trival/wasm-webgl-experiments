@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/trival/wasm-webgl-experiments#readme",
   "dependencies": {
+    "@thi.ng/shader-ast": "^0.12.7",
     "@thi.ng/shader-ast-glsl": "^0.4.4",
     "@thi.ng/shader-ast-stdlib": "^0.11.4",
     "tvs-painter": "./libs/painter"
