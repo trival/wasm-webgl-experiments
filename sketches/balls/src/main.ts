@@ -1,7 +1,9 @@
 import './style.css'
 import init2, {
 	get_geom,
+	get_light,
 	get_mvp,
+	get_normal_mat,
 	setup,
 	update,
 } from '../crate/pkg/tvs_sketch_balls'
@@ -22,7 +24,7 @@ init2().then(() => {
 			update(newTime - lastTime)
 		}
 
-		render(get_mvp())
+		render(get_mvp(), get_normal_mat(), get_light())
 
 		lastTime = newTime
 		requestAnimationFrame(tick)

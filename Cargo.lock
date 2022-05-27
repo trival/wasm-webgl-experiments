@@ -249,6 +249,7 @@ version = "0.1.0"
 dependencies = [
  "bytemuck",
  "glam",
+ "js-sys",
  "serde",
  "serde_repr",
 ]
@@ -263,7 +264,6 @@ dependencies = [
  "getrandom",
  "glam",
  "js-sys",
- "lazy_static",
  "rand",
  "serde",
  "serde-wasm-bindgen",

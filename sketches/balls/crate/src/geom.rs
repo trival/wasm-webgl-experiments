@@ -1,8 +1,7 @@
-use std::f32::consts::PI;
-
 use bytemuck::{Pod, Zeroable};
 use glam::{vec3, Quat, Vec3};
 use serde::Serialize;
+use std::f32::consts::PI;
 use tvs_libs::{
     data_structures::grid::{make_grid_with_coord_ops, CIRCLE_COLS_COORD_OPS},
     geometry::{
@@ -63,14 +62,15 @@ fn vert(pos: Vec3, color: Vec3, x: usize, y: usize) -> Vertex {
 pub fn create_ball1_geom() -> BufferedGeometry {
     let mut grid = make_grid_with_coord_ops(CIRCLE_COLS_COORD_OPS);
     let mut col1 = vec![];
-    let mut y = 5;
-    while y >= -5 {
-        col1.push(vec3(1.0, y as f32, 0.0));
-        y -= 1;
+    let mut y = 5.0;
+    while y >= -5.0 {
+        let x = f32::cos(y / 10.0 * PI) * 5.0;
+        col1.push(vec3(x, y, 0.0));
+        y -= 1.0;
     }
     grid.add_col(col1.clone());
 
-    let stops = 7;
+    let stops = 15;
     let angle = (PI * 2.0) / stops as f32;
     for i in 1..stops {
         let q = Quat::from_rotation_y(angle * i as f32);
