@@ -99,7 +99,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     geom.triangulate();
 
     geom.to_buffered_geometry_by_type(
-        MeshBufferedGeometryType::FaceNormals,
+        MeshBufferedGeometryType::VertexNormals,
         VertexBuffer::vertex_layout(),
     )
 }

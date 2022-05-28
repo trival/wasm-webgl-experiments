@@ -12,7 +12,6 @@ import { render, renderInit, wasmGeometryToFormData } from './render'
 init2().then(() => {
 	setup()
 	const ball = wasmGeometryToFormData(get_geom())
-	console.log(ball)
 	renderInit(ball)
 
 	let lastTime = 0

@@ -9,7 +9,6 @@ mod geom;
 mod state;
 mod utils;
 
-const GEOM: &str = "geom";
 const BALL_1: &str = "ball1";
 
 #[wasm_bindgen]
@@ -18,12 +17,8 @@ pub fn setup() {
     console::log_1(&"Hello, wasm-pack, balls!".into());
 
     State::update(|mut s| {
-        s.scene.set_geometry(GEOM, create_ball1_geom());
-        s.scene.set_obj(
-            BALL_1,
-            GEOM,
-            Transform::from_translation(vec3(0.0, 0.0, -20.0)),
-        );
+        s.scene
+            .set_obj(BALL_1, Transform::from_translation(vec3(0.0, 0.0, -20.0)));
         s.scene.update_cam(|c| {
             c.aspect_ratio = 4.0 / 3.0;
             c.fov = 0.6;
@@ -35,7 +30,7 @@ pub fn setup() {
 
 #[wasm_bindgen]
 pub fn get_geom() -> JsValue {
-    serde_wasm_bindgen::to_value(State::read().scene.geom(GEOM)).unwrap()
+    serde_wasm_bindgen::to_value(&create_ball1_geom()).unwrap()
 }
 
 #[wasm_bindgen]
@@ -60,7 +55,7 @@ pub fn get_light() -> Float32Array {
 pub fn update(tpf: f32) {
     State::update(|mut s| {
         s.scene.update_obj_transform(BALL_1, |t| {
-            t.rotate(Quat::from_rotation_y(0.001 * tpf));
+            t.rotate(Quat::from_rotation_y(0.0003 * tpf));
         });
     });
 }

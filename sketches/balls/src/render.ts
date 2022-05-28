@@ -15,7 +15,7 @@ import {
 	Vec4Sym,
 } from '@thi.ng/shader-ast'
 import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
-import { FormData, Painter } from 'tvs-painter'
+import { FormData, FormStoreType, Painter } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
 import { fs, vs } from '../../shared/glsl/utils'
 
@@ -30,16 +30,22 @@ interface WasmGeometry {
 	buffer: number[]
 	indices?: number[]
 	vertex_size: number
+	vertex_count: number
 	vertex_layout: WasmVertexLayout[]
 }
 
-export function wasmGeometryToFormData(geom: WasmGeometry): FormData {
+export function wasmGeometryToFormData(
+	geom: WasmGeometry,
+	storeType: FormStoreType = 'STATIC',
+): FormData {
 	return {
-		elements: geom.indices ? new Uint32Array(geom.indices) : undefined,
+		elements: geom.indices
+			? { buffer: new Uint32Array(geom.indices), storeType }
+			: undefined,
 		drawType: 'TRIANGLES',
-		itemCount: geom.buffer.length / geom.vertex_size,
+		itemCount: geom.vertex_count,
 		customLayout: {
-			data: new Uint8Array(geom.buffer),
+			data: { buffer: new Uint8Array(geom.buffer), storeType },
 			layout: Object.fromEntries(
 				geom.vertex_layout.map((l) => [
 					l.name,
