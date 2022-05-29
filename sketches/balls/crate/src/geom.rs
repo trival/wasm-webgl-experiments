@@ -64,13 +64,13 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     let mut col1 = vec![];
     let mut y = 5.0;
     while y >= -5.0 {
-        let x = f32::cos(y / 10.0 * PI) * 5.0;
+        let x = f32::sqrt(25.0 - y * y);
         col1.push(vec3(x, y, 0.0));
-        y -= 1.0;
+        y -= 0.5;
     }
     grid.add_col(col1.clone());
 
-    let stops = 15;
+    let stops = 20;
     let angle = (PI * 2.0) / stops as f32;
     for i in 1..stops {
         let q = Quat::from_rotation_y(angle * i as f32);
