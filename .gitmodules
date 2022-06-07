@@ -4,3 +4,6 @@
 [submodule "libs/painter"]
 	path = libs/painter
 	url = git@github.com:trivial-space/painter.git
+[submodule "libs/utils"]
+	path = libs/utils
+	url = https://github.com/trivial-space/utils.git

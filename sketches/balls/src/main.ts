@@ -1,4 +1,5 @@
 import './style.css'
+import { addToLoop } from 'tvs-utils/dist/app/frameLoop'
 import init2, {
 	get_geom,
 	get_light,
@@ -14,20 +15,8 @@ init2().then(() => {
 	const ball = wasmGeometryToFormData(get_geom())
 	renderInit(ball)
 
-	let lastTime = 0
-
-	const tick = (newTime: number) => {
-		if (!(lastTime && newTime)) {
-			update(0)
-		} else {
-			update(newTime - lastTime)
-		}
-
+	addToLoop((tpf) => {
+		update(tpf)
 		render(get_mvp(), get_normal_mat(), get_light())
-
-		lastTime = newTime
-		requestAnimationFrame(tick)
-	}
-
-	tick(0)
+	})
 })

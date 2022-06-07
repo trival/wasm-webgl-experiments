@@ -22,7 +22,8 @@
     "@thi.ng/shader-ast": "^0.12.7",
     "@thi.ng/shader-ast-glsl": "^0.4.4",
     "@thi.ng/shader-ast-stdlib": "^0.11.4",
-    "tvs-painter": "./libs/painter"
+    "tvs-painter": "./libs/painter",
+    "tvs-utils": "./libs/utils"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.2.0",
