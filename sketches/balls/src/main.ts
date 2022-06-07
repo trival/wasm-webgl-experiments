@@ -1,5 +1,5 @@
 import './style.css'
-import { addToLoop } from 'tvs-utils/dist/app/frameLoop'
+import { addToLoop, startLoop } from 'tvs-utils/dist/app/frameLoop'
 import init2, {
 	get_geom,
 	get_light,
@@ -19,4 +19,5 @@ init2().then(() => {
 		update(tpf)
 		render(get_mvp(), get_normal_mat(), get_light())
 	})
+	startLoop()
 })
