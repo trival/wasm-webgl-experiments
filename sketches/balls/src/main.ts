@@ -1,6 +1,7 @@
 import './style.css'
 import { addToLoop, startLoop } from 'tvs-utils/dist/app/frameLoop'
-import init2, {
+import { wasmGeometryToFormData } from '../../shared/wasm/utils'
+import init, {
 	get_geom,
 	get_light,
 	get_mvp,
@@ -8,9 +9,9 @@ import init2, {
 	setup,
 	update,
 } from '../crate/pkg/tvs_sketch_balls'
-import { render, renderInit, wasmGeometryToFormData } from './render'
+import { render, renderInit } from './render'
 
-init2().then(() => {
+init().then(() => {
 	setup()
 	const ball = wasmGeometryToFormData(get_geom())
 	renderInit(ball)
@@ -18,6 +19,11 @@ init2().then(() => {
 	addToLoop((tpf) => {
 		update(tpf)
 		render(get_mvp(), get_normal_mat(), get_light())
-	})
+	}, 'mainLoop')
+
 	startLoop()
 })
+
+if (import.meta.hot) {
+	import.meta.hot.accept()
+}

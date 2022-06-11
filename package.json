@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "wasm": "node -r ts-node/register/transpile-only skripts/watch-rust.ts"
   },
   "repository": {
     "type": "git",
@@ -26,15 +26,22 @@
     "tvs-utils": "./libs/utils"
   },
   "devDependencies": {
+    "@types/node": "^16.11.39",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
+    "chokidar": "^3.5.3",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^4.0.0",
+    "lodash": "^4.17.21",
     "prettier": "^2.5.1",
+    "ts-node": "^10.8.1",
     "typescript": "^4.5.5",
     "vite": "^2.7.13",
     "wasm-pack": "^0.10.2"
+  },
+  "engines": {
+    "node": "16.*"
   }
 }

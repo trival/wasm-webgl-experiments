@@ -15,62 +15,15 @@ import {
 	Vec4Sym,
 } from '@thi.ng/shader-ast'
 import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
-import { FormData, FormStoreType, Painter } from 'tvs-painter'
+import { FormData, Painter } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
 import { fs, vs } from '../../shared/glsl/utils'
+import { Q } from './context'
 
-interface WasmVertexLayout {
-	name: string
-	attr_type: number
-	normalized: boolean
-	offset: number
-	size: number
-}
-interface WasmGeometry {
-	buffer: number[]
-	indices?: number[]
-	vertex_size: number
-	vertex_count: number
-	vertex_layout: WasmVertexLayout[]
-}
-
-export function wasmGeometryToFormData(
-	geom: WasmGeometry,
-	storeType: FormStoreType = 'STATIC',
-): FormData {
-	return {
-		elements: geom.indices
-			? { buffer: new Uint32Array(geom.indices), storeType }
-			: undefined,
-		drawType: 'TRIANGLES',
-		itemCount: geom.vertex_count,
-		customLayout: {
-			data: { buffer: new Uint8Array(geom.buffer), storeType },
-			layout: Object.fromEntries(
-				geom.vertex_layout.map((l) => [
-					l.name,
-					{
-						size: l.size,
-						type: l.attr_type,
-						normalize: l.normalized,
-						stride: geom.vertex_size,
-						offset: l.offset,
-					},
-				]),
-			),
-		},
-	}
-}
-
-const canvas = document.getElementById('canvas') as HTMLCanvasElement
-const painter = new Painter(canvas)
-const { gl } = painter
-const form = painter.createForm()
-
-painter.updateDrawSettings({
-	enable: [gl.DEPTH_TEST, gl.CULL_FACE],
-	clearBits: makeClear(gl, 'depth', 'color'),
-	cullFace: gl.BACK,
+Q.painter.updateDrawSettings({
+	enable: [Q.gl.DEPTH_TEST, Q.gl.CULL_FACE],
+	clearBits: makeClear(Q.gl, 'depth', 'color'),
+	cullFace: Q.gl.BACK,
 })
 
 let aPos: Vec3Sym
@@ -129,8 +82,9 @@ const frag = fs(
 	]),
 )
 
-const shade = painter.createShade().update({ vert, frag })
-const sketch = painter.createSketch().update({
+const form = Q.getForm('ball')
+const shade = Q.getShade('ball').update({ vert, frag })
+const sketch = Q.getSketch('ball').update({
 	form,
 	shade,
 })
@@ -144,7 +98,7 @@ export function render(
 	normalMatrix: Float32Array,
 	light: Float32Array,
 ) {
-	painter.draw({
+	Q.painter.draw({
 		sketches: sketch,
 		uniforms: { camera, light, normalMatrix },
 	})
