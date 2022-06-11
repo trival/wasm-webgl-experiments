@@ -10,7 +10,7 @@ use tvs_libs::{
     },
     rendering::buffered_geometry::{
         vert_type, BufferedGeometry, BufferedVertexData, ToBufferedVertexData, VertexFormat,
-        WithVertexLayout,
+        VertexType,
     },
 };
 
@@ -20,13 +20,12 @@ struct VertexBuffer {
     pos: Vec3,
     color: Vec3,
 }
-impl BufferedVertexData for VertexBuffer {}
-impl WithVertexLayout for VertexBuffer {
-    fn vertex_layout() -> Vec<tvs_libs::rendering::buffered_geometry::VertexType> {
-        let mut layout = vec![];
-        layout.push(vert_type("position", VertexFormat::Float32x3));
-        layout.push(vert_type("color", VertexFormat::Float32x3));
-        layout
+impl BufferedVertexData for VertexBuffer {
+    fn vertex_layout() -> Vec<VertexType> {
+        vec![
+            vert_type("position", VertexFormat::Float32x3),
+            vert_type("color", VertexFormat::Float32x3),
+        ]
     }
 }
 
