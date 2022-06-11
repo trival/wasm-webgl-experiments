@@ -2,7 +2,9 @@
 
 Try out trivial space rust wasm libraries.
 
-## Building crates
+## Building and watching wasm rust crates
 
-1. Go go crate directory
-2. run `npx wasm-pack build --target web`
+To build a create once run `npx wasm-pack build --target web path/to/crate`
+
+To watch and rebuild a create on rust file changes run
+`npm run wasm path/to/crate`

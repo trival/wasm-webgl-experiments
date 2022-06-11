@@ -15,7 +15,7 @@ import {
 	Vec4Sym,
 } from '@thi.ng/shader-ast'
 import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
-import { FormData, Painter } from 'tvs-painter'
+import { FormData } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
 import { fs, vs } from '../../shared/glsl/utils'
 import { Q } from './context'
