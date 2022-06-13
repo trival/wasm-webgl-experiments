@@ -7,7 +7,7 @@ import init, {
 	get_normal_mat,
 	setup,
 	update,
-} from '../crate/pkg/tvs_sketch_balls'
+} from '../crate/pkg/tvs_sketch_strokes'
 import { render, renderInit } from './render'
 
 init().then(() => {

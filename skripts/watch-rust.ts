@@ -18,13 +18,13 @@ function onWatch(path: string) {
 		`npx wasm-pack build --target web ${pathToWatch}`,
 		(err: any, stdout: any, stderr: any) => {
 			if (err) {
-				console.error('something bad happend!')
+				console.error('something bad happend!', err)
 				return
 			}
 
 			// the *entire* stdout and stderr (buffered)
-			console.log(`stdout: ${stdout}`)
-			console.log(`stderr: ${stderr}`)
+			stdout && console.log(`stdout: ${stdout}`)
+			stderr && console.log(`stderr: ${stderr}`)
 		},
 	)
 }
