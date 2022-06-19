@@ -9,8 +9,7 @@ use tvs_libs::{
         vertex_index::{VertIdx2Usize, WithVertexIndex},
     },
     rendering::buffered_geometry::{
-        vert_type, BufferedGeometry, BufferedVertexData, ToBufferedVertexData, VertexFormat,
-        VertexType,
+        vert_type, BufferedGeometry, BufferedVertexData, VertexFormat, VertexType,
     },
 };
 
@@ -43,13 +42,11 @@ impl VertexPosition for Vertex {
         self.data.pos
     }
 }
-
-impl ToBufferedVertexData<VertexBuffer> for Vertex {
+impl MeshVertex<VertIdx2Usize, VertexBuffer> for Vertex {
     fn to_buffered_vertex_data(&self) -> VertexBuffer {
         self.data
     }
 }
-impl MeshVertex<VertIdx2Usize, VertexBuffer> for Vertex {}
 
 fn vert(pos: Vec3, color: Vec3, x: usize, y: usize) -> Vertex {
     Vertex {
@@ -97,10 +94,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     geom.generate_vertex_normals();
     geom.triangulate();
 
-    geom.to_buffered_geometry_by_type(
-        MeshBufferedGeometryType::FaceNormals,
-        VertexBuffer::vertex_layout(),
-    )
+    geom.to_buffered_geometry_by_type(MeshBufferedGeometryType::FaceNormals)
 }
 
 #[test]
