@@ -13,6 +13,7 @@ import {
 	Vec3Sym,
 	vec4,
 	Vec4Sym,
+	float,
 } from '@thi.ng/shader-ast'
 import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
 import { FormData } from 'tvs-painter'
@@ -48,6 +49,7 @@ const vert = vs(
 		//
 		defMain(() => [
 			assign(vs.gl_Position, mul(uCamera, vec4(aPos, 1.0))),
+			assign(vs.gl_PointSize, float(2)),
 			assign(vColor, aColor),
 			assign(vNormal, mul(uNormalMat, aNormal)),
 		]),
