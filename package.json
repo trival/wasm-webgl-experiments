@@ -22,12 +22,12 @@
   "dependencies": {
     "@thi.ng/shader-ast": "^0.12.7",
     "@thi.ng/shader-ast-glsl": "^0.4.4",
-    "@thi.ng/shader-ast-stdlib": "^0.11.4",
+    "@thi.ng/shader-ast-stdlib": "^0.13.0",
     "tvs-painter": "./libs/painter",
     "tvs-utils": "./libs/utils"
   },
   "devDependencies": {
-    "@types/node": "^16.11.39",
+    "@types/node": "~18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
     "chokidar": "^3.5.3",
@@ -39,10 +39,10 @@
     "prettier": "^2.5.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.5.5",
-    "vite": "^2.7.13",
+    "vite": "^4.0.4",
     "wasm-pack": "^0.10.2"
   },
   "engines": {
-    "node": "16.*"
+    "node": "18.*"
   }
 }
