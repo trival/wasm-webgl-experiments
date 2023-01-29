@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "wasm": "node -r ts-node/register/transpile-only skripts/watch-rust.ts"
+    "wasm": "node -r ts-node/register/transpile-only skripts/watch-rust.ts",
+    "git-init": "git submodule update --init --recursive"
   },
   "repository": {
     "type": "git",
