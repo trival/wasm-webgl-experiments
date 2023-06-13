@@ -12,7 +12,9 @@ import { render, renderInit } from './render'
 
 init().then(() => {
 	setup()
-	const ball = wasmGeometryToFormData(get_geom())
+	const geom = get_geom()
+	console.log('wasm geometry', geom)
+	const ball = wasmGeometryToFormData(geom)
 	renderInit(ball)
 
 	addToLoop((tpf) => {
