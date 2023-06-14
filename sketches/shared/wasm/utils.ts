@@ -9,8 +9,8 @@ interface WasmVertexLayout {
 }
 
 interface WasmGeometry {
-	buffer: number[]
-	indices?: number[]
+	buffer: Uint8Array
+	indices?: Uint8Array
 	vertex_size: number
 	vertex_count: number
 	rendering_primitive: number
@@ -23,12 +23,12 @@ export function wasmGeometryToFormData(
 ): FormData {
 	return {
 		elements: geom.indices
-			? { buffer: new Uint32Array(geom.indices), storeType }
+			? { buffer: new Uint32Array(geom.indices.buffer), storeType }
 			: null,
 		drawType: geom.rendering_primitive,
 		itemCount: geom.vertex_count,
 		customLayout: {
-			data: { buffer: new Uint8Array(geom.buffer), storeType },
+			data: { buffer: geom.buffer, storeType },
 			layout: Object.fromEntries(
 				geom.vertex_layout.map((l) => [
 					l.name,

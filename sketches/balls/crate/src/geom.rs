@@ -1,5 +1,6 @@
 use bytemuck::{Pod, Zeroable};
 use glam::{vec3, Quat, Vec3};
+use rand::Rng;
 use serde::Serialize;
 use std::f32::consts::PI;
 use tvs_libs::{
@@ -56,6 +57,8 @@ fn vert(pos: Vec3, color: Vec3, x: usize, y: usize) -> Vertex {
 }
 
 pub fn create_ball1_geom() -> BufferedGeometry {
+    let mut rnd = rand::thread_rng();
+
     let mut grid = make_grid_with_coord_ops(CIRCLE_COLS_COORD_OPS);
     let mut col1 = vec![];
     let mut y = 5.0;
@@ -81,11 +84,17 @@ pub fn create_ball1_geom() -> BufferedGeometry {
             let v2 = v1.bottom().unwrap();
             let v3 = v2.right().unwrap();
             let v4 = v3.top().unwrap();
+
+            let r: f32 = rnd.gen();
+            let g: f32 = rnd.gen();
+            let b: f32 = rnd.gen();
+
+            let color = vec3(r, g, b);
             geom.add_face4(
-                vert(v1.val, vec3(1.0, 0.0, 0.0), v1.x, v1.y),
-                vert(v2.val, vec3(1.0, 0.0, 0.0), v2.x, v2.y),
-                vert(v3.val, vec3(1.0, 0.0, 0.0), v3.x, v3.y),
-                vert(v4.val, vec3(1.0, 0.0, 0.0), v4.x, v4.y),
+                vert(v1.val, color, v1.x, v1.y),
+                vert(v2.val, color, v2.x, v2.y),
+                vert(v3.val, color, v3.x, v3.y),
+                vert(v4.val, color, v4.x, v4.y),
             );
         }
     }
@@ -94,7 +103,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     geom.generate_vertex_normals();
     geom.triangulate();
 
-    geom.to_buffered_geometry_by_type(MeshBufferedGeometryType::FaceNormals)
+    geom.to_buffered_geometry_by_type(MeshBufferedGeometryType::VertexNormals)
 }
 
 #[test]
