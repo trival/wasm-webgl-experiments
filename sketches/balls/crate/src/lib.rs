@@ -1,6 +1,6 @@
 use geom::create_ball1_geom;
 use js_sys::Float32Array;
-use state::{AppState, State};
+use state::State;
 use tvs_libs::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
@@ -16,7 +16,7 @@ pub fn setup() {
     utils::set_panic_hook();
     console::log_1(&"Hello, wasm-pack, balls!".into());
 
-    State::update(|mut s| {
+    State::update(|s| {
         s.scene
             .set_obj(BALL_1, Transform::from_translation(vec3(0.0, 0.0, -20.0)));
         s.scene.update_cam(|c| {
@@ -53,7 +53,7 @@ pub fn get_light() -> Float32Array {
 
 #[wasm_bindgen]
 pub fn update(tpf: f32) {
-    State::update(|mut s| {
+    State::update(|s| {
         s.scene.update_obj_transform(BALL_1, |t| {
             t.rotate(Quat::from_rotation_y(0.0003 * tpf));
         });
