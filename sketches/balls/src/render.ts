@@ -74,8 +74,8 @@ const frag = fs(
 					diffuseLighting(
 						halfLambert(normalize(vNormal), uLight),
 						vColor,
-						vec3(1, 1, 0.6),
-						vec3(0.1, 0.1, 0),
+						vec3(1, 1, 1),
+						vec3(0.1, 0.1, 0.1),
 					),
 					1.0,
 				),

@@ -5,11 +5,11 @@ use std::f32::consts::PI;
 use tvs_libs::{
     data_structures::grid::{make_grid_with_coord_ops, CIRCLE_COLS_COORD_OPS},
     geometry::{
-        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex, VertexPosition},
-        vertex_index::{VertIdx2Usize, WithVertexIndex},
+        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex},
+        vertex_index::VertIdx2Usize,
     },
     rendering::buffered_geometry::{
-        vert_type, BufferedGeometry, BufferedVertexData, VertexFormat, VertexType,
+        vert_type, BufferedGeometry, BufferedVertexData, OverrideWith, VertexFormat, VertexType,
     },
 };
 
@@ -27,24 +27,28 @@ impl BufferedVertexData for VertexBuffer {
         ]
     }
 }
+impl OverrideWith for VertexBuffer {
+    fn override_with(&self, attribs: &Self) -> Self {
+        VertexBuffer {
+            pos: self.pos,
+            color: attribs.color,
+        }
+    }
+}
 
 struct Vertex {
     data: VertexBuffer,
     grid_pos: (usize, usize),
 }
-impl WithVertexIndex<VertIdx2Usize> for Vertex {
-    fn vertex_index(&self) -> VertIdx2Usize {
-        VertIdx2Usize(self.grid_pos.0, self.grid_pos.1)
-    }
-}
-impl VertexPosition for Vertex {
-    fn position(&self) -> Vec3 {
-        self.data.pos
-    }
-}
 impl MeshVertex<VertIdx2Usize, VertexBuffer> for Vertex {
     fn to_buffered_vertex_data(&self) -> VertexBuffer {
         self.data
+    }
+    fn position(&self) -> Vec3 {
+        self.data.pos
+    }
+    fn vertex_index(&self) -> VertIdx2Usize {
+        VertIdx2Usize(self.grid_pos.0, self.grid_pos.1)
     }
 }
 

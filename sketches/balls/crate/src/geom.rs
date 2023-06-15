@@ -6,11 +6,11 @@ use std::f32::consts::PI;
 use tvs_libs::{
     data_structures::grid::{make_grid_with_coord_ops, CIRCLE_COLS_COORD_OPS},
     geometry::{
-        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex, VertexPosition},
-        vertex_index::{VertIdx2Usize, WithVertexIndex},
+        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex},
+        vertex_index::VertIdx2Usize,
     },
     rendering::buffered_geometry::{
-        vert_type, BufferedGeometry, BufferedVertexData, VertexFormat, VertexType,
+        vert_type, BufferedGeometry, BufferedVertexData, OverrideWith, VertexFormat, VertexType,
     },
 };
 
@@ -28,24 +28,28 @@ impl BufferedVertexData for VertexBuffer {
         ]
     }
 }
+impl OverrideWith for VertexBuffer {
+    fn override_with(&self, attribs: &Self) -> Self {
+        VertexBuffer {
+            pos: self.pos,
+            color: attribs.color,
+        }
+    }
+}
 
 struct Vertex {
     data: VertexBuffer,
     grid_pos: (usize, usize),
 }
-impl WithVertexIndex<VertIdx2Usize> for Vertex {
-    fn vertex_index(&self) -> VertIdx2Usize {
-        VertIdx2Usize(self.grid_pos.0, self.grid_pos.1)
-    }
-}
-impl VertexPosition for Vertex {
-    fn position(&self) -> Vec3 {
-        self.data.pos
-    }
-}
 impl MeshVertex<VertIdx2Usize, VertexBuffer> for Vertex {
     fn to_buffered_vertex_data(&self) -> VertexBuffer {
         self.data
+    }
+    fn position(&self) -> Vec3 {
+        self.data.pos
+    }
+    fn vertex_index(&self) -> VertIdx2Usize {
+        VertIdx2Usize(self.grid_pos.0, self.grid_pos.1)
     }
 }
 
@@ -90,11 +94,12 @@ pub fn create_ball1_geom() -> BufferedGeometry {
             let b: f32 = rnd.gen();
 
             let color = vec3(r, g, b);
-            geom.add_face4(
+            geom.add_face4_data(
                 vert(v1.val, color, v1.x, v1.y),
                 vert(v2.val, color, v2.x, v2.y),
                 vert(v3.val, color, v3.x, v3.y),
                 vert(v4.val, color, v4.x, v4.y),
+                Some(VertexBuffer { pos: v1.val, color }),
             );
         }
     }
@@ -103,7 +108,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
     geom.generate_vertex_normals();
     geom.triangulate();
 
-    geom.to_buffered_geometry_by_type(MeshBufferedGeometryType::VertexNormals)
+    geom.to_buffered_geometry_by_type(MeshBufferedGeometryType::VertexNormalFaceData)
 }
 
 #[test]
