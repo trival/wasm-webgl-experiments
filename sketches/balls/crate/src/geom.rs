@@ -32,8 +32,8 @@ impl BufferedVertexData for Vertex {
 impl OverrideAttributesWith for Vertex {
     fn override_with(&self, attribs: &Self) -> Self {
         Vertex {
-            pos: self.pos,
             color: attribs.color,
+            ..*self
         }
     }
 }
