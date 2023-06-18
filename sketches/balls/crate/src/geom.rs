@@ -10,7 +10,7 @@ use tvs_libs::{
         vertex_index::VertIdx2Usize,
     },
     rendering::buffered_geometry::{
-        vert_type, BufferedGeometry, BufferedVertexData, OverrideWith, VertexFormat, VertexType,
+        attr_idx, AttributeIndex, BufferedGeometry, BufferedVertexData, OverrideWith, VertexFormat,
     },
 };
 
@@ -21,10 +21,10 @@ struct VertexBuffer {
     color: Vec3,
 }
 impl BufferedVertexData for VertexBuffer {
-    fn vertex_layout() -> Vec<VertexType> {
+    fn vertex_layout() -> Vec<AttributeIndex> {
         vec![
-            vert_type("position", VertexFormat::Float32x3),
-            vert_type("color", VertexFormat::Float32x3),
+            attr_idx("position", VertexFormat::Float32x3),
+            attr_idx("color", VertexFormat::Float32x3),
         ]
     }
 }
