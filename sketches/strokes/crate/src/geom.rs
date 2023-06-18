@@ -9,7 +9,8 @@ use tvs_libs::{
         vertex_index::VertIdx2Usize,
     },
     rendering::buffered_geometry::{
-        vert_type, BufferedGeometry, BufferedVertexData, OverrideWith, VertexFormat, VertexType,
+        vert_type, BufferedGeometry, BufferedVertexData, OverrideAttributesWith, VertexFormat,
+        VertexType,
     },
 };
 
@@ -27,7 +28,7 @@ impl BufferedVertexData for Vertex {
         ]
     }
 }
-impl OverrideWith for Vertex {
+impl OverrideAttributesWith for Vertex {
     fn override_with(&self, attribs: &Self) -> Self {
         Vertex {
             pos: self.pos,
