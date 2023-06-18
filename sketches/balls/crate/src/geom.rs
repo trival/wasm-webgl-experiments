@@ -6,7 +6,7 @@ use std::f32::consts::PI;
 use tvs_libs::{
     data_structures::grid::{make_grid_with_coord_ops, CIRCLE_COLS_COORD_OPS},
     geometry::{
-        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex},
+        mesh_geometry_3d::{MeshBufferedGeometryType, MeshGeometry, MeshVertex, Position3D},
         vertex_index::VertIdx2Usize,
     },
     rendering::buffered_geometry::{
@@ -16,11 +16,11 @@ use tvs_libs::{
 
 #[repr(C)]
 #[derive(Pod, Zeroable, Clone, Copy, Serialize)]
-struct VertexBuffer {
+struct Vertex {
     pos: Vec3,
     color: Vec3,
 }
-impl BufferedVertexData for VertexBuffer {
+impl BufferedVertexData for Vertex {
     fn vertex_layout() -> Vec<VertexType> {
         vec![
             vert_type("position", VertexFormat::Float32x3),
@@ -28,35 +28,24 @@ impl BufferedVertexData for VertexBuffer {
         ]
     }
 }
-impl OverrideWith for VertexBuffer {
+impl OverrideWith for Vertex {
     fn override_with(&self, attribs: &Self) -> Self {
-        VertexBuffer {
+        Vertex {
             pos: self.pos,
             color: attribs.color,
         }
     }
 }
-
-struct Vertex {
-    data: VertexBuffer,
-    grid_pos: (usize, usize),
-}
-impl MeshVertex<VertIdx2Usize, VertexBuffer> for Vertex {
-    fn to_buffered_vertex_data(&self) -> VertexBuffer {
-        self.data
-    }
+impl Position3D for Vertex {
     fn position(&self) -> Vec3 {
-        self.data.pos
-    }
-    fn vertex_index(&self) -> VertIdx2Usize {
-        VertIdx2Usize(self.grid_pos.0, self.grid_pos.1)
+        self.pos
     }
 }
 
-fn vert(pos: Vec3, color: Vec3, x: usize, y: usize) -> Vertex {
-    Vertex {
-        data: VertexBuffer { pos, color },
-        grid_pos: (x, y),
+fn vert(pos: Vec3, color: Vec3, x: usize, y: usize) -> MeshVertex<VertIdx2Usize, Vertex> {
+    MeshVertex {
+        data: Vertex { pos, color },
+        vertex_index: VertIdx2Usize(x, y),
     }
 }
 
@@ -99,7 +88,7 @@ pub fn create_ball1_geom() -> BufferedGeometry {
                 vert(v2.val, color, v2.x, v2.y),
                 vert(v3.val, color, v3.x, v3.y),
                 vert(v4.val, color, v4.x, v4.y),
-                Some(VertexBuffer { pos: v1.val, color }),
+                Some(Vertex { pos: v1.val, color }),
             );
         }
     }
