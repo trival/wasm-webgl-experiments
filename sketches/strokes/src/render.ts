@@ -1,105 +1,75 @@
 import {
 	assign,
 	defMain,
+	div,
 	input,
-	Mat3Sym,
-	Mat4Sym,
-	mul,
-	normalize,
 	output,
 	program,
 	uniform,
-	vec3,
-	Vec3Sym,
+	Vec2Sym,
 	vec4,
 	Vec4Sym,
 } from '@thi.ng/shader-ast'
-import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
 import { FormData } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
 import { fs, vs } from '../../shared/glsl/utils'
 import { Q } from './context'
 
 Q.painter.updateDrawSettings({
-	enable: [Q.gl.DEPTH_TEST, Q.gl.CULL_FACE],
+	// enable: [Q.gl.DEPTH_TEST, Q.gl.CULL_FACE],
 	clearBits: makeClear(Q.gl, 'depth', 'color'),
-	cullFace: Q.gl.BACK,
+	// cullFace: Q.gl.BACK,
 })
 
-let aPos: Vec3Sym
-let aNormal: Vec3Sym
-let aColor: Vec3Sym
-let uCamera: Mat4Sym
-let uNormalMat: Mat3Sym
-let vColor: Vec3Sym
-let vNormal: Vec3Sym
+let aPos: Vec2Sym
+// let aWidth: FloatSym
+// let aLength: FloatSym
+let aUv: Vec2Sym
+// let aLocalUv: Vec2Sym
+let uSize: Vec2Sym
+let vUv: Vec2Sym
 
 const vert = vs(
 	program([
-		(aPos = input('vec3', 'position')),
-		(aNormal = input('vec3', 'normal')),
-		(aColor = input('vec3', 'color')),
+		(aPos = input('vec2', 'position')),
+		(aUv = input('vec2', 'uv')),
 		//
-		(uCamera = uniform('mat4', 'camera')),
-		(uNormalMat = uniform('mat3', 'normalMatrix')),
+		(uSize = uniform('vec2', 'size')),
 		//
-		(vColor = output('vec3', 'vColor')),
-		(vNormal = output('vec3', 'vNormal')),
+		(vUv = output('vec2', 'vUv')),
 		//
 		defMain(() => [
-			assign(vs.gl_Position, mul(uCamera, vec4(aPos, 1.0))),
-			assign(vColor, aColor),
-			assign(vNormal, mul(uNormalMat, aNormal)),
+			assign(vs.gl_Position, vec4(div(aPos, uSize), 0.0, 1.0)),
+			assign(vUv, aUv),
 		]),
 	]),
 )
 
 let fragColor: Vec4Sym
-let uLight: Vec3Sym
 
 const frag = fs(
 	program([
-		(vColor = input('vec3', 'vColor')),
-		(vNormal = input('vec3', 'vNormal')),
-		(uLight = uniform('vec3', 'light')),
+		(vUv = input('vec2', 'vUv')),
 		//
 		(fragColor = output('vec4', 'color')),
 		//
-		defMain(() => [
-			assign(
-				fragColor,
-				vec4(
-					diffuseLighting(
-						halfLambert(normalize(vNormal), uLight),
-						vColor,
-						vec3(1, 1, 0.6),
-						vec3(0.1, 0.1, 0),
-					),
-					1.0,
-				),
-			),
-		]),
+		defMain(() => [assign(fragColor, vec4(vUv, 0.0, 1.0))]),
 	]),
 )
 
-const form = Q.getForm('ball')
-const shade = Q.getShade('ball').update({ vert, frag })
-const sketch = Q.getSketch('ball').update({
+const form = Q.getForm('line')
+const shade = Q.getShade('line').update({ vert, frag })
+const sketch = Q.getSketch('line').update({
 	form,
 	shade,
 })
 
-export function renderInit(geometry: FormData) {
+export function render(geometry: FormData) {
 	form.update(geometry)
-}
-
-export function render(
-	camera: Float32Array,
-	normalMatrix: Float32Array,
-	light: Float32Array,
-) {
 	Q.painter.draw({
 		sketches: sketch,
-		uniforms: { camera, light, normalMatrix },
+		uniforms: {
+			size: [Q.gl.drawingBufferWidth, Q.gl.drawingBufferHeight],
+		},
 	})
 }

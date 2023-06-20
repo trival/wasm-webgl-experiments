@@ -1,13 +1,25 @@
 use geom::create_ball1_geom;
 use js_sys::Float32Array;
-use state::State;
 use tvs_libs::prelude::*;
+use tvs_libs::rendering::scene::Scene;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
 mod geom;
-mod state;
 mod utils;
+
+#[derive(Default)]
+pub struct State {
+    pub scene: Scene,
+    pub light_dir: Vec3,
+}
+
+impl AppState for State {
+    unsafe fn state_cell() -> &'static mut OnceCell<Self> {
+        static mut STATE: OnceCell<State> = OnceCell::new();
+        &mut STATE
+    }
+}
 
 const BALL_1: &str = "ball1";
 
