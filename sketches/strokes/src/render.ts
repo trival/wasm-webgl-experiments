@@ -27,7 +27,16 @@ const shader = defShader({
 			assign(out.vUv, inp.uv),
 			assign(
 				gl.gl_Position,
-				vec4(mul(fit0111(div(inp.position, uniforms.size)), vec2(1, -1)), 0, 1),
+				// prettier-ignore
+				vec4(
+					mul(
+						fit0111(
+							div(inp.position, uniforms.size)
+						),
+						vec2(1, -1)
+					),
+					0, 1
+				),
 			),
 		]),
 	],
