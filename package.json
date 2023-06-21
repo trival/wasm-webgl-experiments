@@ -23,6 +23,7 @@
     "@thi.ng/shader-ast": "^0.12.7",
     "@thi.ng/shader-ast-glsl": "^0.4.4",
     "@thi.ng/shader-ast-stdlib": "^0.13.0",
+    "@thi.ng/webgl": "^6.4.8",
     "tvs-painter": "./libs/painter",
     "tvs-utils": "./libs/utils"
   },

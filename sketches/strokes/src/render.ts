@@ -1,64 +1,43 @@
-import {
-	assign,
-	defMain,
-	div,
-	input,
-	output,
-	program,
-	uniform,
-	Vec2Sym,
-	vec4,
-	Vec4Sym,
-} from '@thi.ng/shader-ast'
+import { assign, defMain, div, mul, vec2, vec4 } from '@thi.ng/shader-ast'
+import { fit0111 } from '@thi.ng/shader-ast-stdlib'
 import { FormData } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
-import { fs, vs } from '../../shared/glsl/utils'
+import { defShader } from '../../shared/glsl/utils'
 import { Q } from './context'
 
 Q.painter.updateDrawSettings({
-	// enable: [Q.gl.DEPTH_TEST, Q.gl.CULL_FACE],
-	clearBits: makeClear(Q.gl, 'depth', 'color'),
-	// cullFace: Q.gl.BACK,
+	enable: [Q.gl.CULL_FACE],
+	clearBits: makeClear(Q.gl, 'color'),
+	cullFace: Q.gl.BACK,
 })
 
-let aPos: Vec2Sym
-// let aWidth: FloatSym
-// let aLength: FloatSym
-let aUv: Vec2Sym
-// let aLocalUv: Vec2Sym
-let uSize: Vec2Sym
-let vUv: Vec2Sym
-
-const vert = vs(
-	program([
-		(aPos = input('vec2', 'position')),
-		(aUv = input('vec2', 'uv')),
-		//
-		(uSize = uniform('vec2', 'size')),
-		//
-		(vUv = output('vec2', 'vUv')),
-		//
+const shader = defShader({
+	attribs: {
+		position: 'vec2',
+		uv: 'vec2',
+	},
+	varying: {
+		vUv: 'vec2',
+	},
+	uniforms: {
+		size: 'vec2',
+	},
+	vs: (gl, uniforms, inp, out) => [
 		defMain(() => [
-			assign(vs.gl_Position, vec4(div(aPos, uSize), 0.0, 1.0)),
-			assign(vUv, aUv),
+			assign(out.vUv, inp.uv),
+			assign(
+				gl.gl_Position,
+				vec4(mul(fit0111(div(inp.position, uniforms.size)), vec2(1, -1)), 0, 1),
+			),
 		]),
-	]),
-)
-
-let fragColor: Vec4Sym
-
-const frag = fs(
-	program([
-		(vUv = input('vec2', 'vUv')),
-		//
-		(fragColor = output('vec4', 'color')),
-		//
-		defMain(() => [assign(fragColor, vec4(vUv, 0.0, 1.0))]),
-	]),
-)
+	],
+	fs: (gl, uniforms, inp, out) => [
+		defMain(() => [assign(out.fragColor, vec4(inp.vUv, 0, 1))]),
+	],
+})
 
 const form = Q.getForm('line')
-const shade = Q.getShade('line').update({ vert, frag })
+const shade = Q.getShade('line').update(shader)
 const sketch = Q.getSketch('line').update({
 	form,
 	shade,

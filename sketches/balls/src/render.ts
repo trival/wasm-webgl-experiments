@@ -18,7 +18,7 @@ import {
 import { diffuseLighting, halfLambert } from '@thi.ng/shader-ast-stdlib'
 import { FormData } from 'tvs-painter'
 import { makeClear } from 'tvs-painter/dist/utils/context'
-import { fs, vs } from '../../shared/glsl/utils'
+import { defShader } from '../../shared/glsl/utils'
 import { Q } from './context'
 
 Q.painter.updateDrawSettings({
@@ -27,65 +27,49 @@ Q.painter.updateDrawSettings({
 	cullFace: Q.gl.BACK,
 })
 
-let aPos: Vec3Sym
-let aNormal: Vec3Sym
-let aColor: Vec3Sym
-let uCamera: Mat4Sym
-let uNormalMat: Mat3Sym
-let vColor: Vec3Sym
-let vNormal: Vec3Sym
-
-const vert = vs(
-	program([
-		(aPos = input('vec3', 'position')),
-		(aNormal = input('vec3', 'normal')),
-		(aColor = input('vec3', 'color')),
-		//
-		(uCamera = uniform('mat4', 'camera')),
-		(uNormalMat = uniform('mat3', 'normalMatrix')),
-		//
-		(vColor = output('vec3', 'vColor')),
-		(vNormal = output('vec3', 'vNormal')),
-		//
+const shader = defShader({
+	attribs: {
+		position: 'vec3',
+		normal: 'vec3',
+		color: 'vec3',
+	},
+	uniforms: {
+		camera: 'mat4',
+		normalMatrix: 'mat3',
+		light: 'vec3',
+	},
+	varying: {
+		vColor: 'vec3',
+		vNormal: 'vec3',
+	},
+	vs: (gl, uniforms, inp, out) => [
 		defMain(() => [
-			assign(vs.gl_Position, mul(uCamera, vec4(aPos, 1.0))),
-			assign(vs.gl_PointSize, float(2)),
-			assign(vColor, aColor),
-			assign(vNormal, mul(uNormalMat, aNormal)),
+			assign(gl.gl_Position, mul(uniforms.camera, vec4(inp.position, 1.0))),
+			assign(gl.gl_PointSize, float(2)),
+			assign(out.vColor, inp.color),
+			assign(out.vNormal, mul(uniforms.normalMatrix, inp.normal)),
 		]),
-	]),
-)
-
-let fragColor: Vec4Sym
-let uLight: Vec3Sym
-
-const frag = fs(
-	program([
-		(vColor = input('vec3', 'vColor')),
-		(vNormal = input('vec3', 'vNormal')),
-		(uLight = uniform('vec3', 'light')),
-		//
-		(fragColor = output('vec4', 'color')),
-		//
+	],
+	fs: (gl, uniforms, inp, out) => [
 		defMain(() => [
 			assign(
-				fragColor,
+				out.fragColor,
 				vec4(
 					diffuseLighting(
-						halfLambert(normalize(vNormal), uLight),
-						vColor,
+						halfLambert(normalize(inp.vNormal), uniforms.light),
+						inp.vColor,
 						vec3(1, 1, 1),
-						vec3(0.1, 0.1, 0.1),
+						vec3(0.1, 0.0, 0.0),
 					),
 					1.0,
 				),
 			),
 		]),
-	]),
-)
+	],
+})
 
 const form = Q.getForm('ball')
-const shade = Q.getShade('ball').update({ vert, frag })
+const shade = Q.getShade('ball').update(shader)
 const sketch = Q.getSketch('ball').update({
 	form,
 	shade,
