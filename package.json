@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "wasm": "node -r ts-node/register/transpile-only skripts/watch-rust.ts",
+    "wasm": "node scripts/watch-rust.ts",
     "git-init": "git submodule update --init --recursive"
   },
   "repository": {
@@ -38,7 +38,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "lodash": "^4.17.21",
     "prettier": "^2.5.1",
-    "ts-node": "^10.8.1",
     "typescript": "^5.1.3",
     "vite": "^4.0.4",
     "wasm-pack": "^0.11.1"

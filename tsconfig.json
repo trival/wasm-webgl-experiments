@@ -11,5 +11,5 @@
     "noEmit": true,
     "types": ["vite/client", "node"]
   },
-  "include": ["sketches", "libs", "skripts"]
+  "include": ["sketches", "libs", "scripts"]
 }
